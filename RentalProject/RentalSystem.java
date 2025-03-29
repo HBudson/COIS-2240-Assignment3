@@ -102,7 +102,6 @@ public class RentalSystem {
             System.out.println("An error occurred while loading customers: " + e.getMessage());
         }
 
-
         // Load rental records from rental_records.txt
         try (BufferedReader recordReader = new BufferedReader(new FileReader("rental_records.txt"))) {
             String line;
@@ -212,7 +211,7 @@ public class RentalSystem {
     
     public Customer findCustomerById(String id) {
         for (Customer c : customers)
-            if (c.getCustomerId() == Integer.parseInt(id))
+            if (c.getCustomerName() == id)
                 return c;
         return null;
     }

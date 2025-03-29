@@ -74,8 +74,7 @@ public class VehicleRentalApp {
                 	System.out.println("Registered Customers:");
                 	rentalSystem.displayAllCustomers();
 
-                    System.out.print("Enter customer ID: ");
-                    String cidRent = scanner.nextLine();
+                	String cidRent = scanner.nextLine();  
 
                     System.out.print("Enter rental amount: ");
                     double rentAmount = scanner.nextDouble();
@@ -103,7 +102,7 @@ public class VehicleRentalApp {
                 	rentalSystem.displayAllCustomers();
 
                     System.out.print("Enter customer ID: ");
-                    String cidReturn = scanner.nextLine();
+                    String cidReturn = scanner.nextLine();  
 
                     System.out.print("Enter return fees: ");
                     double returnFees = scanner.nextDouble();
