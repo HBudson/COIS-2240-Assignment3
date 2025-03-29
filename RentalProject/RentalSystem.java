@@ -1,4 +1,7 @@
 import java.util.List;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 
@@ -85,5 +88,40 @@ public class RentalSystem {
             if (c.getCustomerId() == Integer.parseInt(id))
                 return c;
         return null;
+    }
+    
+    public void saveVehicle(Vehicle vehicle) {
+    	try (BufferedWriter writer = new BufferedWriter(new FileWriter("vehicles.txt", 
+    			true))) {
+            writer.write(vehicle.getLicensePlate() + "," + vehicle.getMake() + "," + 
+    			vehicle.getModel() + "," + vehicle.getYear());
+            writer.newLine();  // Add a new line after each record
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the vehicle: " + 
+        e.getMessage());
+        }
+    }
+    
+    public void saveCustomer(Customer customer) {
+    	try (BufferedWriter writer = new BufferedWriter(new FileWriter("customers.txt", 
+    			true))) {
+            writer.write(customer.getCustomerId() + "," + customer.getCustomerName());
+            writer.newLine();  
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the customer: " + 
+        e.getMessage());
+        }
+    }
+    
+    public void saveRecord(RentalRecord record) {
+    	try (BufferedWriter writer = new BufferedWriter(new FileWriter
+    			("rental_records.txt", true))) {
+            writer.write(record.getVehicle().getLicensePlate() + "," + 
+                         record.getCustomer().getCustomerId() + ",");
+            writer.newLine();  
+        } catch (IOException e) {
+            System.out.println("An error occurred while saving the rental record: " + 
+        e.getMessage());
+        }
     }
 }
