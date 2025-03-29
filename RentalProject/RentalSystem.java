@@ -22,16 +22,20 @@ public class RentalSystem {
     
     public void addVehicle(Vehicle vehicle) {
         vehicles.add(vehicle);
+        saveVehicle(vehicle);
     }
 
     public void addCustomer(Customer customer) {
         customers.add(customer);
+        saveCustomer(customer);
     }
 
     public void rentVehicle(Vehicle vehicle, Customer customer, LocalDate date, double amount) {
         if (vehicle.getStatus() == Vehicle.VehicleStatus.AVAILABLE) {
             vehicle.setStatus(Vehicle.VehicleStatus.RENTED);
-            rentalHistory.addRecord(new RentalRecord(vehicle, customer, date, amount, "RENT"));
+            RentalRecord record = new RentalRecord(vehicle, customer, date, amount, "RENT");
+            rentalHistory.addRecord(record);
+            saveRecord(record);
             System.out.println("Vehicle rented to " + customer.getCustomerName());
         }
         else {
@@ -42,7 +46,9 @@ public class RentalSystem {
     public void returnVehicle(Vehicle vehicle, Customer customer, LocalDate date, double extraFees) {
         if (vehicle.getStatus() == Vehicle.VehicleStatus.RENTED) {
             vehicle.setStatus(Vehicle.VehicleStatus.AVAILABLE);
-            rentalHistory.addRecord(new RentalRecord(vehicle, customer, date, extraFees, "RETURN"));
+            RentalRecord record = new RentalRecord(vehicle, customer, date, extraFees, "RETURN");
+            rentalHistory.addRecord(record);
+            saveRecord(record);
             System.out.println("Vehicle returned by " + customer.getCustomerName());
         }
         else {
