@@ -1,0 +1,1 @@
+| 1234AB | Ford | F150 | 2017 | AVAILABLE | | Cargo Capacity: 420.0
