@@ -11,7 +11,15 @@ public class RentalSystem {
     private List<Customer> customers = new ArrayList<>();
     private RentalHistory rentalHistory = new RentalHistory();
 
-    private RentalSystem() {}
+    private RentalSystem() {
+    	loadData();
+    }
+    
+    
+    private void loadData() {
+    	
+    }
+    
     
     public static RentalSystem getInstance() {
     	if (instance == null) {
@@ -99,9 +107,8 @@ public class RentalSystem {
     public void saveVehicle(Vehicle vehicle) {
     	try (BufferedWriter writer = new BufferedWriter(new FileWriter("vehicles.txt", 
     			true))) {
-            writer.write(vehicle.getLicensePlate() + "," + vehicle.getMake() + "," + 
-    			vehicle.getModel() + "," + vehicle.getYear());
-            writer.newLine();  // Add a new line after each record
+            writer.write(vehicle.getInfo());
+            writer.newLine(); 
         } catch (IOException e) {
             System.out.println("An error occurred while saving the vehicle: " + 
         e.getMessage());
@@ -111,7 +118,7 @@ public class RentalSystem {
     public void saveCustomer(Customer customer) {
     	try (BufferedWriter writer = new BufferedWriter(new FileWriter("customers.txt", 
     			true))) {
-            writer.write(customer.getCustomerId() + "," + customer.getCustomerName());
+            writer.write(customer.toString());
             writer.newLine();  
         } catch (IOException e) {
             System.out.println("An error occurred while saving the customer: " + 
@@ -122,8 +129,7 @@ public class RentalSystem {
     public void saveRecord(RentalRecord record) {
     	try (BufferedWriter writer = new BufferedWriter(new FileWriter
     			("rental_records.txt", true))) {
-            writer.write(record.getVehicle().getLicensePlate() + "," + 
-                         record.getCustomer().getCustomerId() + ",");
+            writer.write(record.toString());
             writer.newLine();  
         } catch (IOException e) {
             System.out.println("An error occurred while saving the rental record: " + 
