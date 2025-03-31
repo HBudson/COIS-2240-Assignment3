@@ -1,3 +1,5 @@
 | 1234AB | Ford | F150 | 2017 | AVAILABLE | | Cargo Capacity: 420.0
 | 2005TY | Springlo | Bringloid | 2002 | AVAILABLE | | Seats: 5
 | 2 | 2 | 2 | 2 | AVAILABLE | | Seats: 5
+| 1234 | Ferrari | Gold 4 | 2019 | AVAILABLE | | Seats: 4
+| 1 | 1 | 1 | 1000 | AVAILABLE | | Sidecar: Yes

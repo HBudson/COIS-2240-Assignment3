@@ -209,9 +209,9 @@ public class RentalSystem {
         return null;
     }
     
-    public Customer findCustomerById(String id) {
+    public Customer findCustomerById(int id) {
         for (Customer c : customers)
-            if (c.getCustomerName() == id)
+            if (c.getCustomerId() == id)
                 return c;
         return null;
     }
