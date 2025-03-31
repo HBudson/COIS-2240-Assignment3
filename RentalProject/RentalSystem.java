@@ -1,11 +1,12 @@
 import java.util.List;
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.FileReader;
-import java.io.FileWriter;
+import java.io.EOFException;
+import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.ObjectInputStream;
 import java.time.LocalDate;
 import java.util.ArrayList;
+import java.io.FileOutputStream;
+import java.io.ObjectOutputStream;
 
 public class RentalSystem {
 	private static RentalSystem instance;
@@ -19,122 +20,48 @@ public class RentalSystem {
     
     
     private void loadData() {
-        // Load vehicles from vehicles.txt
-        try (BufferedReader vehicleReader = new BufferedReader(new FileReader("vehicles.txt"))) {
-            String line;
-            while ((line = vehicleReader.readLine()) != null) {
-                String[] vehicleData = line.split("\\|");
-                if (vehicleData.length >= 6) {
-                    String licensePlate = vehicleData[1].trim();
-                    String make = vehicleData[2].trim();
-                    String model = vehicleData[3].trim();
-                    int year = Integer.parseInt(vehicleData[4].trim());
-                    Vehicle.VehicleStatus status = Vehicle.VehicleStatus.valueOf(vehicleData[5].trim());
-                    String additionalInfo = vehicleData[6].trim();  
-                    
-                    Vehicle vehicle = null;
-
-                    // Determine the type of vehicle and initialize accordingly
-                    if (additionalInfo.startsWith("Seats:")) {
-                        int numSeats = Integer.parseInt(additionalInfo.split(":")[1].trim());
-                        vehicle = new Car(make, model, year, numSeats);
-                    } else if (additionalInfo.startsWith("Sidecar:")) {
-                        boolean hasSidecar = additionalInfo.split(":")[1].trim().equals("Yes");
-                        vehicle = new Motorcycle(make, model, year, hasSidecar);
-                    } else if (additionalInfo.startsWith("Cargo Capacity:")) {
-                        double cargoCapacity = Double.parseDouble(additionalInfo.split(":")[1].trim());
-                        vehicle = new Truck(make, model, year, cargoCapacity);
-                    } else if (additionalInfo.startsWith("Horsepower:")) {
-                        int horsepower = Integer.parseInt(additionalInfo.split(":")[1].trim());
-                        boolean hasTurbo = additionalInfo.split(":")[2].trim().equals("Yes");
-                        int numSeats = Integer.parseInt(vehicleData[7].trim()); 
-                        vehicle = new SportCar(make, model, year, numSeats, horsepower, hasTurbo);
-                    }
-
-                    if (vehicle != null) {
-                        vehicle.setLicensePlate(licensePlate);  
-                        vehicle.setStatus(status);  
-                        vehicles.add(vehicle);  
-                    }
+        // Load vehicles from vehicles.ser
+        try (ObjectInputStream vehicleReader = new ObjectInputStream(new FileInputStream("vehicles.ser"))) {
+            Vehicle vehicle;
+            while (true) {  // Keep reading until end of file
+                try {
+                    vehicle = (Vehicle) vehicleReader.readObject();
+                    vehicles.add(vehicle);  // Add each vehicle to the list
+                } catch (EOFException e) {
+                    break;  // End of file reached
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading vehicles: " + e.getMessage());
         }
 
-        // Load customers from customers.txt
-        try (BufferedReader customerReader = new BufferedReader(new FileReader("customers.txt"))) {
-            String line;
-            while ((line = customerReader.readLine()) != null) {
-                // Split by the '|' symbol to separate the ID and Name
-                String[] customerData = line.split("\\|");
-                
-                // Log to see how the line is being split
-                System.out.println("Customer Data Line: " + line);
-                System.out.println("customerData length: " + customerData.length);
-                for (String part : customerData) {
-                    System.out.println("Part: " + part);
-                }
-                
-                if (customerData.length == 2) {
-                    // Extract the ID part
-                    String idAsString = customerData[0].split(":")[1].trim();
-                    System.out.println("ID as String: " + idAsString);
-                    
-                    // Safely parse the ID as an integer
-                    try {
-                        int customerId = Integer.parseInt(idAsString);
-                        System.out.println("Parsed Customer ID: " + customerId);
-                        
-                        // Extract the Name part
-                        String customerName = customerData[1].split(":")[1].trim();  
-                        System.out.println("Customer Name: " + customerName);
-                        
-                        // Create the customer and add to the list
-                        Customer customer = new Customer(customerId, customerName);
-                        customers.add(customer);
-                    } catch (NumberFormatException e) {
-                        System.out.println("Error parsing customer ID: " + idAsString);
-                    }
+        // Load customers from customers.ser
+        try (ObjectInputStream customerReader = new ObjectInputStream(new FileInputStream("customers.ser"))) {
+            Customer customer;
+            while (true) {  // Keep reading until end of file
+                try {
+                    customer = (Customer) customerReader.readObject();
+                    customers.add(customer);  // Add each customer to the list
+                } catch (EOFException e) {
+                    break;  // End of file reached
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading customers: " + e.getMessage());
         }
 
-        // Load rental records from rental_records.txt
-        try (BufferedReader recordReader = new BufferedReader(new FileReader("rental_records.txt"))) {
-            String line;
-            while ((line = recordReader.readLine()) != null) {
-                
-                String[] recordData = line.split("\\|");
-                if (recordData.length == 5) {
-                    String vehiclePlate = recordData[1].split(":")[1].trim();
-                    String customerName = recordData[2].split(":")[1].trim();
-                    LocalDate date = LocalDate.parse(recordData[3].split(":")[1].trim());
-                    String amountStr = recordData[4].split(":")[1].trim();
-                    amountStr = amountStr.replaceAll("[^0-9.]", "");  
-                    double amount = Double.parseDouble(amountStr);
-
-
-                    Vehicle vehicle = findVehicleByPlate(vehiclePlate);
-                    
-                    for (Customer c : customers) {
-                    	if (c.getCustomerName() == customerName) {
-                    		int customerId = c.getCustomerId();
-                    		String idAsString = Integer.toString(customerId);
-                    		Customer customer = findCustomerById(idAsString);
-                    		
-                    		if (vehicle != null && customer != null) {
-                                RentalRecord record = new RentalRecord(vehicle, customer, date, amount, "RENT");
-                                rentalHistory.addRecord(record);
-                            }
-                    	}
-                    	break;
-                    }
+        // Load rental records from rental_records.ser
+        try (ObjectInputStream recordReader = new ObjectInputStream(new FileInputStream("rental_records.ser"))) {
+            RentalRecord record;
+            while (true) {  // Keep reading until end of file
+                try {
+                    record = (RentalRecord) recordReader.readObject();
+                    rentalHistory.addRecord(record);  // Add each rental record to the list
+                } catch (EOFException e) {
+                    break;  // End of file reached
                 }
             }
-        } catch (IOException e) {
+        } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading rental records: " + e.getMessage());
         }
     }
@@ -225,35 +152,26 @@ public class RentalSystem {
     }
     
     public void saveVehicle(Vehicle vehicle) {
-    	try (BufferedWriter writer = new BufferedWriter(new FileWriter("vehicles.txt", 
-    			true))) {
-            writer.write(vehicle.getInfo());
-            writer.newLine(); 
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("vehicles.ser", true))) {
+            out.writeObject(vehicle);
         } catch (IOException e) {
-            System.out.println("An error occurred while saving the vehicle: " + 
-        e.getMessage());
+            System.out.println("An error occurred while saving the vehicle: " + e.getMessage());
         }
     }
-    
+
     public void saveCustomer(Customer customer) {
-    	try (BufferedWriter writer = new BufferedWriter(new FileWriter("customers.txt", 
-    			true))) {
-            writer.write(customer.toString());
-            writer.newLine();  
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("customers.ser", true))) {
+            out.writeObject(customer);
         } catch (IOException e) {
-            System.out.println("An error occurred while saving the customer: " + 
-        e.getMessage());
+            System.out.println("An error occurred while saving the customer: " + e.getMessage());
         }
     }
-    
+
     public void saveRecord(RentalRecord record) {
-    	try (BufferedWriter writer = new BufferedWriter(new FileWriter
-    			("rental_records.txt", true))) {
-            writer.write(record.toString());
-            writer.newLine();  
+        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("rental_records.ser", true))) {
+            out.writeObject(record);
         } catch (IOException e) {
-            System.out.println("An error occurred while saving the rental record: " + 
-        e.getMessage());
+            System.out.println("An error occurred while saving the rental record: " + e.getMessage());
         }
     }
 }
