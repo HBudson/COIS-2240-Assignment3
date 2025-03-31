@@ -1,6 +1,7 @@
 import java.util.List;
 import java.io.EOFException;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.time.LocalDate;
@@ -31,6 +32,8 @@ public class RentalSystem {
                     break;  // End of file reached
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("No vehicles data found, starting fresh.");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading vehicles: " + e.getMessage());
         }
@@ -46,6 +49,8 @@ public class RentalSystem {
                     break;  // End of file reached
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("No customers data found, starting fresh.");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading customers: " + e.getMessage());
         }
@@ -61,10 +66,13 @@ public class RentalSystem {
                     break;  // End of file reached
                 }
             }
+        } catch (FileNotFoundException e) {
+            System.out.println("No rental records data found, starting fresh.");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading rental records: " + e.getMessage());
         }
     }
+
 
     
     
