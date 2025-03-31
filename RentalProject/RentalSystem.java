@@ -118,11 +118,19 @@ public class RentalSystem {
 
 
                     Vehicle vehicle = findVehicleByPlate(vehiclePlate);
-                    Customer customer = findCustomerById(customerName);
                     
-                    if (vehicle != null && customer != null) {
-                        RentalRecord record = new RentalRecord(vehicle, customer, date, amount, "RENT");
-                        rentalHistory.addRecord(record);
+                    for (Customer c : customers) {
+                    	if (c.getCustomerName() == customerName) {
+                    		int customerId = c.getCustomerId();
+                    		String idAsString = Integer.toString(customerId);
+                    		Customer customer = findCustomerById(idAsString);
+                    		
+                    		if (vehicle != null && customer != null) {
+                                RentalRecord record = new RentalRecord(vehicle, customer, date, amount, "RENT");
+                                rentalHistory.addRecord(record);
+                            }
+                    	}
+                    	break;
                     }
                 }
             }
@@ -209,9 +217,9 @@ public class RentalSystem {
         return null;
     }
     
-    public Customer findCustomerById(int id) {
+    public Customer findCustomerById(String id) {
         for (Customer c : customers)
-            if (c.getCustomerId() == id)
+            if (c.getCustomerId() == Integer.parseInt(id))
                 return c;
         return null;
     }
