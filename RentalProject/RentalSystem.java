@@ -33,7 +33,7 @@ public class RentalSystem {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("No vehicles data found, starting fresh.");
+            System.out.println("No existing vehicles found.");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading vehicles: " + e.getMessage());
         }
@@ -50,7 +50,7 @@ public class RentalSystem {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("No customers data found, starting fresh.");
+            System.out.println("No existing customers found.");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading customers: " + e.getMessage());
         }
@@ -67,7 +67,7 @@ public class RentalSystem {
                 }
             }
         } catch (FileNotFoundException e) {
-            System.out.println("No rental records data found, starting fresh.");
+            System.out.println("No recorded rental data found.");
         } catch (IOException | ClassNotFoundException e) {
             System.out.println("An error occurred while loading rental records: " + e.getMessage());
         }

@@ -1,4 +1,6 @@
 public class Truck extends Vehicle implements Rentable {
+	private static final long serialVersionUID = 1L;
+	
     private double cargoCapacity;
 
     public Truck(String make, String model, int year, double cargoCapacity) {

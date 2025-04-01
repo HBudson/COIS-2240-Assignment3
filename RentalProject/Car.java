@@ -1,4 +1,6 @@
 public class Car extends Vehicle implements Rentable {
+	private static final long serialVersionUID = 1L;
+	
     private int numSeats;
 
     public Car(String make, String model, int year, int numSeats) {

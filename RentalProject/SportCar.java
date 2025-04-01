@@ -1,4 +1,6 @@
 public final class SportCar extends Car {
+	private static final long serialVersionUID = 1L;
+	
     private int horsepower;
     private boolean hasTurbo;
 
