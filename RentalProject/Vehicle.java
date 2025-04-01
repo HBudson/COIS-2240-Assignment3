@@ -1,7 +1,7 @@
 import java.io.Serializable;
 
 public abstract class Vehicle implements Serializable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 111L;
 	
     private String licensePlate;
     private String make;

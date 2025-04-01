@@ -100,6 +100,8 @@ public class RentalSystem {
             rentalHistory.addRecord(record);
             saveRecord(record);
             System.out.println("Vehicle rented to " + customer.getCustomerName());
+            
+            saveVehicle(vehicle);
         }
         else {
             System.out.println("Vehicle is not available for renting.");
@@ -113,6 +115,8 @@ public class RentalSystem {
             rentalHistory.addRecord(record);
             saveRecord(record);
             System.out.println("Vehicle returned by " + customer.getCustomerName());
+            
+            saveVehicle(vehicle);
         }
         else {
             System.out.println("Vehicle is not rented.");
@@ -159,13 +163,39 @@ public class RentalSystem {
         return null;
     }
     
-    public void saveVehicle(Vehicle vehicle) {
-        try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("vehicles.ser", true))) {
-            out.writeObject(vehicle);
+    private void saveVehicle(Vehicle updatedVehicle) {
+        List<Vehicle> updatedVehicles = new ArrayList<>();
+
+        // Load the current list of vehicles from the file
+        try (ObjectInputStream vehicleReader = new ObjectInputStream(new FileInputStream("vehicles.ser"))) {
+            Vehicle vehicle;
+            while (true) {
+                try {
+                    vehicle = (Vehicle) vehicleReader.readObject();
+                    // Add each vehicle to the updated list, replacing the vehicle if its plate matches
+                    if (vehicle.getLicensePlate().equals(updatedVehicle.getLicensePlate())) {
+                        updatedVehicles.add(updatedVehicle);  // Replace with the updated vehicle
+                    } else {
+                        updatedVehicles.add(vehicle);  // Keep the other vehicles as-is
+                    }
+                } catch (EOFException e) {
+                    break;
+                }
+            }
+        } catch (IOException | ClassNotFoundException e) {
+            System.out.println("Error while loading vehicles: " + e.getMessage());
+        }
+
+        // Now serialize the entire updated list of vehicles (including the updated vehicle)
+        try (ObjectOutputStream vehicleWriter = new ObjectOutputStream(new FileOutputStream("vehicles.ser"))) {
+            for (Vehicle vehicle : updatedVehicles) {
+                vehicleWriter.writeObject(vehicle);  // Serialize the updated list
+            }
         } catch (IOException e) {
-            System.out.println("An error occurred while saving the vehicle: " + e.getMessage());
+            System.out.println("Error while saving vehicles: " + e.getMessage());
         }
     }
+
 
     public void saveCustomer(Customer customer) {
         try (ObjectOutputStream out = new ObjectOutputStream(new FileOutputStream("customers.ser", true))) {

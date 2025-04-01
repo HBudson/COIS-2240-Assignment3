@@ -1,5 +1,5 @@
 public class Car extends Vehicle implements Rentable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 113L;
 	
     private int numSeats;
 

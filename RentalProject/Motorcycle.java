@@ -1,5 +1,5 @@
 public class Motorcycle extends Vehicle implements Rentable {
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 114L;
 	
     private boolean hasSidecar;
 

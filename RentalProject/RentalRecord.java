@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.io.Serializable;
 
 public class RentalRecord implements Serializable{
-	private static final long serialVersionUID = 1L;
+	private static final long serialVersionUID = 3L;
 	
     private Vehicle vehicle;
     private Customer customer;
