@@ -12,19 +12,20 @@ public abstract class Vehicle implements Serializable {
     public enum VehicleStatus { AVAILABLE, RESERVED, RENTED, MAINTENANCE, OUTOFSERVICE }
 
     public Vehicle(String make, String model, int year) {
-    	capitalize(make);
-    	capitalize(model);
+    	this.make = capitalize(make);
+    	this.model = capitalize(model);
     	
         this.year = year;
         this.status = VehicleStatus.AVAILABLE;
         this.licensePlate = null;
     }
 
-	private void capitalize(String input) {
+	private String capitalize(String input) {
 		if (input == null || input.isEmpty())
     		input = null;
     	else
     		input = input.substring(0, 1).toUpperCase() + input.substring(1).toLowerCase();
+		return input;
 	}
 
     public Vehicle() {
