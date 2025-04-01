@@ -84,13 +84,41 @@ public class RentalSystem {
     }
     
     public void addVehicle(Vehicle vehicle) {
-        vehicles.add(vehicle);
-        saveVehicle(vehicle);
+    	int dupeFlag = 0;
+    	for (Vehicle v : vehicles) {
+    		if (v.getLicensePlate() == vehicle.getLicensePlate()) {
+    			System.out.println("Vehicle " + vehicle.getLicensePlate() 
+    			+ " already exists.");
+    			dupeFlag = 1;
+    		}
+    	}
+    	if (dupeFlag != 1) {
+    		vehicles.add(vehicle);
+    		saveVehicle(vehicle);
+    		System.out.println("Vehicle added.");
+    	}
+    	else {
+    		System.out.println("Vehicle not added.");
+    	}
     }
 
     public void addCustomer(Customer customer) {
-        customers.add(customer);
-        saveCustomer(customer);
+    	int dupeFlag = 0;
+    	for (Customer c: customers) {
+    		if (c.getCustomerId() == customer.getCustomerId()) {
+    			System.out.println("Customer " + customer.getCustomerId() 
+    			+ " already exists.");
+    			dupeFlag = 1;
+    		}
+    	}
+    	if (dupeFlag != 1) {
+    		customers.add(customer);
+    		saveCustomer(customer);
+    		System.out.println("Customer added.");
+    	}
+    	else {
+    		System.out.println("Customer not added.");
+    	}
     }
 
     public void rentVehicle(Vehicle vehicle, Customer customer, LocalDate date, double amount) {

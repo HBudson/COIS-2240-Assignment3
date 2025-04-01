@@ -47,7 +47,6 @@ public class VehicleRentalApp {
                     if (vehicle != null){
 	                    vehicle.setLicensePlate(plate);
 	                    rentalSystem.addVehicle(vehicle);
-	                    System.out.println("Vehicle added.");
                     }
                     else {
 	                    System.out.println("Vehicle not added.");
@@ -61,7 +60,6 @@ public class VehicleRentalApp {
                     String cname = scanner.nextLine();
 
                     rentalSystem.addCustomer(new Customer(Integer.parseInt(cid), cname));
-                    System.out.println("Customer added.");
                     break;
                     
                 case 3:
