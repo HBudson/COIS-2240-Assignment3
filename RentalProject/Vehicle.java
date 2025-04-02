@@ -32,10 +32,45 @@ public abstract class Vehicle implements Serializable {
         this(null, null, 0);
     }
 
-    public void setLicensePlate(String plate) {
-        this.licensePlate = plate == null ? null : plate.toUpperCase();
+    public void setLicensePlate(String plate) throws IllegalArgumentException{
+    	if (isValidPlate(plate)) 
+            this.licensePlate = plate.toUpperCase();
+    	else
+    		throw new IllegalArgumentException("License plate is invalid.");
     }
 
+    private Boolean isValidPlate(String plate) {
+		int i = 0;
+		int flag = 0;
+		
+		if (plate == null) 
+			return false;
+		if (plate.isEmpty())
+			return false;
+		if (plate.length() != 6)
+			return false;
+		
+		else {
+			for (char c : plate.toCharArray()) {
+				if (i < 3) {
+					if ((c >= '0') && (c <= '9')) {
+						flag = 1;
+					}
+				}
+				else if (i >= 3) {
+					if (!(c >= '0') && !(c <= '9')) {
+						flag = 1;
+					}
+				}
+				i++;
+			}
+		}
+		if (flag == 1)
+			return false;
+		else
+			return true;
+	}
+    
     public void setStatus(VehicleStatus status) {
     	this.status = status;
     }

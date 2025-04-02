@@ -17,8 +17,9 @@ public class VehicleRentalApp {
                     int type = scanner.nextInt();
                     scanner.nextLine();
 
-                    System.out.print("Enter license plate: ");
-                    String plate = scanner.nextLine();
+	                System.out.print("Enter license plate: ");
+	                String plate = scanner.nextLine();
+                   
                     System.out.print("Enter make: ");
                     String make = scanner.nextLine();
                     System.out.print("Enter model: ");
@@ -45,7 +46,14 @@ public class VehicleRentalApp {
 		            }
                     
                     if (vehicle != null){
-	                    vehicle.setLicensePlate(plate);
+                    	try {
+                    		vehicle.setLicensePlate(plate);
+                    	}
+                    	catch (IllegalArgumentException e) {
+                        	System.out.println("License plate is empty or formatted "
+                        			+ "incorrectly.");
+                        }
+                    	
 	                    rentalSystem.addVehicle(vehicle);
                     }
                     else {
